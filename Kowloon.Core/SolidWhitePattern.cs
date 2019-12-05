@@ -12,11 +12,7 @@ namespace Kowloon.Core
         public void Render(bool isFirstFrame)
         {
             if (isFirstFrame)
-            {
-                Span<int> leds = Controller.Leds;
-                for (int i = 0; i < leds.Length; i++)
-                { leds[i] = 0x00FFFFFF; }
-            }
+            { Controller.Leds.Fill(0xFFFFFF); }
         }
     }
 }

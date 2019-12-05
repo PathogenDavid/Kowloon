@@ -12,19 +12,28 @@ namespace Kowloon.Core
         private readonly TimeSpan MinimumFrameTime;
 
         public int FrameNumber { get; private set; } = 0;
-        public double FrameTimeSeconds { get; private set; } = 0.0;
+        /// <summary>The time elapsed since the beginning of the previous frame, in seconds.</summary>
+        public double FrameTime { get; private set; } = 0.0;
+        /// <summary>The time elapsed since the beginning of the render, in seconds.</summary>
+        public double Timestamp { get; private set; } = 0.0;
 
         private readonly Thread RenderThread;
         private volatile bool IsRunning = true;
 
         public Span<int> Leds => LedString.Leds;
 
+        public byte Brightness
+        {
+            get => LedString.Brightness;
+            set => LedString.Brightness = value;
+        }
+
         public IRenderer PrimaryRenderer { get; set; }
         public IRenderer OverrideRenderer { get; set; } = null;
 
         public KowloonController()
         {
-            LedString = LedString.Create(240);
+            LedString = LedString.Create(199);
             MaximumFrameRate = 60;
             MinimumFrameTime = TimeSpan.FromSeconds(1.0 / ((double)MaximumFrameRate));
 
@@ -35,15 +44,18 @@ namespace Kowloon.Core
 
         private void RenderThreadEntry()
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            Stopwatch frameStopwatch = new Stopwatch();
+            Stopwatch totalStopwatch = new Stopwatch();
+            frameStopwatch.Start();
+            totalStopwatch.Start();
             IRenderer lastRenderer = null;
 
             while (IsRunning)
             {
                 FrameNumber++;
-                FrameTimeSeconds = stopwatch.Elapsed.TotalSeconds;
-                stopwatch.Restart();
+                FrameTime = frameStopwatch.Elapsed.TotalSeconds;
+                frameStopwatch.Restart();
+                Timestamp = totalStopwatch.Elapsed.TotalSeconds;
 
                 // Determine the current renderer
                 IRenderer renderer = OverrideRenderer ?? PrimaryRenderer;
@@ -60,11 +72,14 @@ namespace Kowloon.Core
                 // Render a frame
                 renderer?.Render(isFirstFrame);
 
+                // The last LED in the string seems to be broken, make sure it's always off.
+                Leds[Leds.Length - 1] = 0;
+
                 // Render the current frame buffer to the LED string
                 LedString.Render();
 
                 // Sleep for the remaining frame time
-                TimeSpan sleepTime = MinimumFrameTime - stopwatch.Elapsed;
+                TimeSpan sleepTime = MinimumFrameTime - frameStopwatch.Elapsed;
                 if (sleepTime > TimeSpan.FromMilliseconds(1))
                 { Thread.Sleep(sleepTime); }
             }

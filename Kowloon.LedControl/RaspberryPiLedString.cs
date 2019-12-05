@@ -9,6 +9,12 @@ namespace Kowloon.LedControl
         private ws2811_t NativeString;
         public unsafe override Span<int> Leds => new Span<int>(NativeString.channel0.leds, NativeString.channel0.count);
 
+        public override byte Brightness
+        {
+            get => NativeString.channel0.brightness;
+            set => NativeString.channel0.brightness = value;
+        }
+
         public RaspberryPiLedString(int ledCount)
         {
             if (ledCount <= 0)

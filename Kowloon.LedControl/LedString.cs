@@ -7,6 +7,8 @@ namespace Kowloon.LedControl
     {
         public abstract Span<int> Leds { get; }
 
+        public abstract byte Brightness { get; set; }
+
         public abstract void Render();
 
         public void Dispose()

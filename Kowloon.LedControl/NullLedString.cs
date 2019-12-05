@@ -7,6 +7,8 @@ namespace Kowloon.LedControl
         private readonly int[] LedArray;
         public override Span<int> Leds => LedArray;
 
+        public override byte Brightness { get; set; }
+
         public NullLedString(int ledCount)
             => LedArray = new int[ledCount];
 

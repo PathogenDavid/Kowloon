@@ -4,9 +4,16 @@ using System.Collections.ObjectModel;
 
 namespace Kowloon.Core
 {
-    public sealed class KowloonManager : IDisposable
+    public sealed partial class KowloonManager : IDisposable
     {
         private readonly KowloonController Controller;
+        public int LedCount => Controller.Leds.Length;
+
+        public byte Brightness
+        {
+            get => Controller.Brightness;
+            set => Controller.Brightness = value;
+        }
 
         private List<IRenderer> _TestRenderers = new List<IRenderer>();
         public ReadOnlyCollection<IRenderer> TestRenderers { get; }
@@ -23,6 +30,12 @@ namespace Kowloon.Core
                 new CyberPattern(Controller),
                 new SolidColorCyclePattern(Controller),
                 new SolidWhitePattern(Controller),
+                new PulsePattern(Controller),
+                new RainbowPattern(Controller),
+                new SolidRainbowPattern(Controller),
+                new SingleLedTest(Controller),
+                new ApartmentTest(Controller),
+                new ShowUnusedLeds(Controller),
             };
             TestRenderers = _TestRenderers.AsReadOnly();
         }

@@ -7,7 +7,7 @@ namespace Kowloon.Core
     {
         private readonly KowloonController Controller;
         private readonly Stopwatch Stopwatch = new Stopwatch();
-        private static int[] Colors = { 0x00FFFFFF, 0xFF0000, 0x0000FF00, 0x000000FF };
+        private static int[] Colors = { 0x00FFFFFF, 0x00FF0000, 0x0000FF00, 0x000000FF };
         private int ColorIndex = 0;
 
         internal SolidColorCyclePattern(KowloonController controller)
@@ -30,11 +30,7 @@ namespace Kowloon.Core
             else
             { ColorIndex = (ColorIndex + 1) % Colors.Length; }
 
-            int color = Colors[ColorIndex];
-            Span<int> leds = Controller.Leds;
-
-            for (int i = 0; i < leds.Length; i++)
-            { leds[i] = color; }
+            Controller.Leds.Fill(Colors[ColorIndex]);
         }
     }
 }
