@@ -6,6 +6,7 @@ After=network.target
 PassEnvironment=HOME
 WorkingDirectory=/opt/kowloon
 ExecStart=/opt/dotnet/dotnet Kowloon.dll
+KillSignal=SIGINT
 
 Restart=on-failure
 
