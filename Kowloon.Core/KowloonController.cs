@@ -89,6 +89,8 @@ namespace Kowloon.Core
         {
             IsRunning = false;
             RenderThread.Join();
+            Leds.Clear();
+            LedString.Render();
             LedString.Dispose();
         }
     }
