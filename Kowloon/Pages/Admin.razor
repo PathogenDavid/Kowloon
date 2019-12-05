@@ -7,19 +7,27 @@
 
     @if (renderer is IRangedTest rangedTest)
     {
-        <input class="@PatternButtonClass(renderer)" type="number" value="@rangedTest.Value" @onchange="e => UpdateRangedTest(rangedTest, int.Parse(e.Value.ToString()))" />
+        <input class="@PatternButtonClass(renderer)" type="number" value="@rangedTest.Value" @onchange="e => UpdateRangedTest(rangedTest, e.Value?.ToString())" />
     }
 
     <br>
 }
 <button class="@PatternButtonClass(null)" @onclick="e => Program.Kowloon.DisableTestRenderer()">Disable test pattern</button><br>
 
-Brightness: <input type="number" value="@Program.Kowloon.Brightness" @onchange="e => Program.Kowloon.Brightness = byte.Parse(e.Value.ToString())" /><br>
+Brightness: <input type="number" value="@Program.Kowloon.Brightness" @onchange="e => UpdateBrightness(e.Value?.ToString())" /><br>
 
 @code
 {
     private string PatternButtonClass(IRenderer renderer)
         => Program.Kowloon.CurrentTestRenderer == renderer ? "selected" : "";
+
+    private static void UpdateRangedTest(IRangedTest rangedTest, string newValue)
+    {
+        if (int.TryParse(newValue, out int newIntegerValue))
+        { UpdateRangedTest(rangedTest, newIntegerValue); }
+        else
+        { Console.Error.WriteLine($"Received invalid ranged value for {rangedTest.GetType()}, request ignored."); }
+    }
 
     private static void UpdateRangedTest(IRangedTest rangedTest, int newValue)
     {
@@ -31,5 +39,13 @@ Brightness: <input type="number" value="@Program.Kowloon.Brightness" @onchange="
         { newValue = rangedTest.MinimumValue; }
 
         rangedTest.Value = newValue;
+    }
+
+    private static void UpdateBrightness(string newBrightness)
+    {
+        if (byte.TryParse(newBrightness, out byte newBrightnessValue))
+        { Program.Kowloon.Brightness = newBrightnessValue; }
+        else
+        { Console.Error.WriteLine($"Received invalid brightness value, request ignored."); }
     }
 }
