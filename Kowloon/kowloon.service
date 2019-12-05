@@ -3,8 +3,9 @@ Description=Kowloon
 After=network.target
  
 [Service]
+PassEnvironment=HOME
 WorkingDirectory=/opt/kowloon
-ExecStart=/opt/dotnet/dotnet kowloon.dll
+ExecStart=/opt/dotnet/dotnet Kowloon.dll
 
 Restart=on-failure
 
