@@ -11,6 +11,8 @@ namespace Kowloon.Core
         /// <remarks>Negative numbers are indices into the pallete. Positive are specific colors. 0 is always black.</remarks>
         public readonly int[] ApartmentColors = new int[KowloonConfig.ApartmentRanges.Count];
 
+        public event Action ApartmentColorsChanged;
+
         /// <summary>The current palette</summary>
         /// <remarks>The 0th color must always be black.</remarks>
         private int[] CurrentPalette =
@@ -31,6 +33,8 @@ namespace Kowloon.Core
         {
             for (int i = 0; i < ApartmentColors.Length; i++)
             { ApartmentColors[i] = -Random.Next(CurrentPalette.Length); }
+
+            ApartmentColorsChanged?.Invoke();
         }
 
         public void CycleApartment(int apartmentIndex)
@@ -53,6 +57,8 @@ namespace Kowloon.Core
             { newColor = 0; }
 
             ApartmentColors[apartmentIndex] = newColor;
+
+            ApartmentColorsChanged?.Invoke();
         }
 
         public int GetColor(int apartmentIndex)

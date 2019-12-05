@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Kowloon.Core;
+@implements IDisposable
 
 <div class="app-name">
     九龍
@@ -22,3 +23,15 @@
         }
     }
 </div>
+
+@code
+{
+    protected override void OnInitialized()
+        => Program.Kowloon.Apartments.ApartmentColorsChanged += ApartmentColorsChanged;
+
+    private void ApartmentColorsChanged()
+        => InvokeAsync(StateHasChanged);
+
+    public void Dispose()
+        => Program.Kowloon.Apartments.ApartmentColorsChanged -= ApartmentColorsChanged;
+}
