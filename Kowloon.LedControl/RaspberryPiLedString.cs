@@ -17,7 +17,11 @@ namespace Kowloon.LedControl
             NativeString = new ws2811_t()
             {
                 freq = ws2811_t.WS2811_TARGET_FREQ,
-                dmanum = 9, // Documentation recommends 10, but we had issues with 10 causing SD card access timeouts and random freezes.
+                // Documentation recommends 10, but we had issues with 10 causing SD card access timeouts and random freezes.
+                // We tried 9, but that caused the WiFi driver to lock up randomly.
+                // It would be very cool if we had some way of knowing what channels are safe.
+                // (There's `/sys/class/dma/dma0chan*/in_use`, but it doesn't seem to be reliable.)
+                dmanum = 8,
                 channel0 = new ws2811_channel_t()
                 {
                     gpionum = 18,
