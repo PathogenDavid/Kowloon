@@ -67,7 +67,7 @@ namespace Kowloon.Core
             (12, 14),
             (7, 10),
             // 2-row
-            (5, 6), // LED 6 is not pointing in the box, but I think that's because it's bent back and aiming into the room.
+            (5, 5),
             (2, 2),
             // Bottom 1-row
             (0, 1),
