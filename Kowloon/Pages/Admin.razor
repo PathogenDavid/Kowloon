@@ -12,7 +12,7 @@
 
     <br>
 }
-<button class="@PatternButtonClass(null)" @onclick="e => Program.Kowloon.DisableTestRenderer()">Disable test pattern</button><br>
+<button class="@PatternButtonClass(null)" @onclick="e => Program.Kowloon.DisableTestRenderer()" style="font-weight: bold">Resume normal operation</button><br>
 
 Brightness: <input type="number" value="@Program.Kowloon.Brightness" @onchange="e => UpdateBrightness(e.Value?.ToString())" /><br>
 
