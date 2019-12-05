@@ -1,6 +1,9 @@
 ﻿@page "/"
 @using Kowloon.Core;
 
+<div class="app-name">
+    九龍
+</div>
 <div class="kowloon">
     @{
         int apartmentIndex = 0;
@@ -13,7 +16,8 @@
         
         for (int i = 0; i < width; i++)
         {
-            <div class="apartment"></div>
+            int thisApartmentIndex = apartmentIndex;
+            <div class="apartment" @onclick="e => Program.Kowloon.Apartments.CycleApartment(thisApartmentIndex)"></div>
             apartmentIndex++;
         }
     }

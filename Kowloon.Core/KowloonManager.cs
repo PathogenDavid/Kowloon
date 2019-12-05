@@ -18,11 +18,15 @@ namespace Kowloon.Core
         private List<IRenderer> _TestRenderers = new List<IRenderer>();
         public ReadOnlyCollection<IRenderer> TestRenderers { get; }
 
+        public ApartmentManager Apartments { get; }
+
         public IRenderer CurrentTestRenderer => Controller.OverrideRenderer;
 
         public KowloonManager()
         {
             Controller = new KowloonController();
+
+            Controller.PrimaryRenderer = Apartments = new ApartmentManager(Controller);
 
             _TestRenderers = new List<IRenderer>()
             {
