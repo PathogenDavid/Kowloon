@@ -1,4 +1,20 @@
 ﻿@page "/"
 @using Kowloon.Core;
 
-Hello, world!
+<div class="kowloon">
+    @{
+        int apartmentIndex = 0;
+        double x = -KowloonConfig.MinimumLeftOffset;
+    }
+    @foreach ((double offset, int width) in KowloonConfig.RowDescriptions)
+    {
+        x += offset;
+        <div class="rowStart" style="width: @(x.ToString("0.##"))em"></div>
+        
+        for (int i = 0; i < width; i++)
+        {
+            <div class="apartment"></div>
+            apartmentIndex++;
+        }
+    }
+</div>

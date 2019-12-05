@@ -8,3 +8,37 @@
 button.selected, input.selected {
     background: white;
 }
+
+.kowloon {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-wrap: none;
+    clear: both;
+    font-size: 6vh;
+}
+
+.kowloon > div {
+    display: block;
+    height: 1em;
+    overflow: hidden;
+    text-wrap: none;
+    box-sizing: border-box;
+}
+
+.kowloon .rowStart {
+    clear: left;
+    display: block;
+    float: left;
+    width: 0;
+    height: 1em;
+}
+
+.kowloon .apartment {
+    display: block;
+    float: left;
+    margin: 2px;
+    background: gray;
+    width: 1em;
+    height: 1em;
+}
