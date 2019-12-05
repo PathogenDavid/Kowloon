@@ -1,3 +1,0 @@
-To build libws2811.so, follow the normal build instructions https://github.com/jgarff/rpi_ws281x#build and run `scons libws2811.so`
-
-Current libws2811.so version was built from 6b01e53c3f8bbcfd2c49c447d4c6a6e2b0031370 with minor fix to rpihw.c to fix ARM64 build target.
