@@ -1,0 +1,14 @@
+﻿@page "/"
+@using Kowloon.Core;
+
+@foreach (IRenderer renderer in Program.Kowloon.TestRenderers)
+{
+    <button class="@PatternButtonClass(renderer)" @onclick="e => Program.Kowloon.SetTestRenderer(renderer)">@renderer.GetType().Name</button><br>
+}
+<button class="@PatternButtonClass(null)" @onclick="e => Program.Kowloon.DisableTestRenderer()">Disable test pattern</button>
+
+@code
+{
+    string PatternButtonClass(IRenderer renderer)
+        => Program.Kowloon.CurrentTestRenderer == renderer ? "selected" : "";
+}

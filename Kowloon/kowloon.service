@@ -1,0 +1,12 @@
+[Unit]
+Description=Kowloon
+After=network.target
+ 
+[Service]
+WorkingDirectory=/opt/kowloon
+ExecStart=/opt/dotnet/dotnet kowloon.dll
+
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
