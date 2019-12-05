@@ -1,0 +1,35 @@
+﻿@page "/admin"
+@using Kowloon.Core;
+
+@foreach (IRenderer renderer in Program.Kowloon.TestRenderers)
+{
+    <button class="@PatternButtonClass(renderer)" @onclick="e => Program.Kowloon.SetTestRenderer(renderer)">@renderer.GetType().Name</button>
+
+    @if (renderer is IRangedTest rangedTest)
+    {
+        <input class="@PatternButtonClass(renderer)" type="number" value="@rangedTest.Value" @onchange="e => UpdateRangedTest(rangedTest, int.Parse(e.Value.ToString()))" />
+    }
+
+    <br>
+}
+<button class="@PatternButtonClass(null)" @onclick="e => Program.Kowloon.DisableTestRenderer()">Disable test pattern</button><br>
+
+Brightness: <input type="number" value="@Program.Kowloon.Brightness" @onchange="e => Program.Kowloon.Brightness = byte.Parse(e.Value.ToString())" /><br>
+
+@code
+{
+    private string PatternButtonClass(IRenderer renderer)
+        => Program.Kowloon.CurrentTestRenderer == renderer ? "selected" : "";
+
+    private static void UpdateRangedTest(IRangedTest rangedTest, int newValue)
+    {
+        Program.Kowloon.SetTestRenderer(rangedTest);
+
+        if (newValue < rangedTest.MinimumValue)
+        { newValue = rangedTest.MaximumValue - 1; }
+        else if (newValue >= rangedTest.MaximumValue)
+        { newValue = rangedTest.MinimumValue; }
+
+        rangedTest.Value = newValue;
+    }
+}
