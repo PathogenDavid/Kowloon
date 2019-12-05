@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyberTest", "CyberTest\Cybe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kowloon.LedControl", "Kowloon.LedControl\Kowloon.LedControl.csproj", "{99946185-7AF3-4E4B-9777-96839FDBFA65}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kowloon.Core", "Kowloon.Core\Kowloon.Core.csproj", "{53CD70FA-B4F3-447D-937F-3E5DF6D2BE88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{99946185-7AF3-4E4B-9777-96839FDBFA65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99946185-7AF3-4E4B-9777-96839FDBFA65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99946185-7AF3-4E4B-9777-96839FDBFA65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53CD70FA-B4F3-447D-937F-3E5DF6D2BE88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53CD70FA-B4F3-447D-937F-3E5DF6D2BE88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53CD70FA-B4F3-447D-937F-3E5DF6D2BE88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53CD70FA-B4F3-447D-937F-3E5DF6D2BE88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
