@@ -36,6 +36,7 @@ namespace Kowloon.Core
                 new SingleLedTest(Controller),
                 new ApartmentTest(Controller),
                 new ShowUnusedLeds(Controller),
+                new RowTest(Controller),
             };
             TestRenderers = _TestRenderers.AsReadOnly();
         }

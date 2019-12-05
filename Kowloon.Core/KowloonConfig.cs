@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Kowloon.Core
@@ -74,6 +73,52 @@ namespace Kowloon.Core
             (0, 1),
         };
 
+        private static readonly (double Offset, int Width)[] _RowDescriptions =
+        {
+            (0, 1),
+            (-1.25, 2),
+            (-1.75, 3),
+            (0.5, 4),
+            (-1.8, 5),
+            (-1.5, 5),
+            (1.5, 5),
+            (1.2, 4),
+            (0.8, 4),
+            (-0.7, 3),
+            (0.6, 3),
+            (1.4, 2),
+            (0.5, 2),
+            (1.5, 1),
+        };
+
         public static readonly ReadOnlyCollection<(int StartIndex, int EndIndex)> ApartmentRanges = Array.AsReadOnly(_ApartmentRanges);
+        public static readonly ReadOnlyCollection<(double Offset, int Width)> RowDescriptions = Array.AsReadOnly(_RowDescriptions);
+
+        public static readonly double MinimumLeftOffset;
+        public static readonly double MaximumRightOffset;
+
+        static KowloonConfig()
+        {
+            MinimumLeftOffset = 0.0;
+            MaximumRightOffset = 0.0;
+
+            double offset = 0.0;
+            int totalApartmentCount = 0;
+            foreach ((double rowOffset, int width) in RowDescriptions)
+            {
+                offset += rowOffset;
+                totalApartmentCount += width;
+
+                if (offset < MinimumLeftOffset)
+                { MinimumLeftOffset = offset; }
+
+                double rightOffset = offset + width;
+                if (rightOffset > MaximumRightOffset)
+                { MaximumRightOffset = rightOffset; }
+            }
+
+            if (ApartmentRanges.Count != totalApartmentCount)
+            { Console.Error.WriteLine($"Kowloon configuraiton error: Row descriptions have {totalApartmentCount} apartments, but {ApartmentRanges.Count} are defined."); }
+        }
     }
 }
