@@ -11,6 +11,8 @@ namespace Kowloon.Core
         /// <remarks>Negative numbers are indices into the pallete. Positive are specific colors. 0 is always black.</remarks>
         public readonly int[] ApartmentColors = new int[KowloonConfig.ApartmentRanges.Count];
 
+        private readonly double[] FlickerTimers = new double[KowloonConfig.ApartmentRanges.Count];
+
         public event Action ApartmentColorsChanged;
 
         /// <summary>The current palette</summary>
@@ -99,6 +101,30 @@ namespace Kowloon.Core
 
                 if (!KowloonConfig.IsValidRange(firstLedIndex, lastLedIndex, leds.Length))
                 { continue; }
+
+                // If this apartment isn't flickering, it has a random chance to start
+                if (FlickerTimers[apartmentIndex] <= 0.0)
+                {
+                    if (Random.NextDouble() > 0.998)
+                    { FlickerTimers[apartmentIndex] = 0.1 + Random.NextDouble() * 3.0; }
+                }
+                // If it is flickering, reduce the flicker timer and apply the flicker effect
+                else if (color != 0x00F24D00) // Don't flicker the orange, it looks weird.
+                {
+                    FlickerTimers[apartmentIndex] -= Controller.FrameTime;
+
+                    int flickerAmount = Random.Next(0, 48);
+                    int r = color >> 16 & 0xFF;
+                    int g = color >> 8 & 0xFF;
+                    int b = color & 0xFF;
+                    r -= flickerAmount;
+                    g -= flickerAmount;
+                    b -= flickerAmount;
+                    r &= 0xFF;
+                    g &= 0xFF;
+                    b &= 0xFF;
+                    color = r << 16 | g << 8 | b;
+                }
 
                 // Color the apartment
                 for (int ledIndex = firstLedIndex; ledIndex <= lastLedIndex; ledIndex++)
