@@ -55,6 +55,26 @@ namespace Kowloon.Core
             ApartmentColors[apartmentIndex] = newColor;
         }
 
+        public int GetColor(int apartmentIndex)
+        {
+            if (apartmentIndex < 0 || apartmentIndex >= ApartmentColors.Length)
+            { return 0; }
+
+            // Determine the apartment color
+            int color = ApartmentColors[apartmentIndex];
+
+            if (color < 0)
+            {
+                color = -color % CurrentPalette.Length;
+                color = CurrentPalette[color];
+            }
+
+            return color;
+        }
+
+        public string GetCssColor(int apartmentIndex)
+            => $"#{GetColor(apartmentIndex) & 0xFFFFFF:X6}";
+
         public void Render(bool isFirstFrame)
         {
             Span<int> leds = Controller.Leds;
@@ -62,17 +82,11 @@ namespace Kowloon.Core
 
             for (int apartmentIndex = 0; apartmentIndex < ApartmentColors.Length; apartmentIndex++)
             {
-                // Determine the apartment color
-                int color = ApartmentColors[apartmentIndex];
+                int color = GetColor(apartmentIndex);
 
+                // If the apartment is off, skip processing it
                 if (color == 0)
                 { continue; }
-
-                if (color < 0)
-                {
-                    color = -color % CurrentPalette.Length;
-                    color = CurrentPalette[color];
-                }
 
                 // Get the apartment LED range
                 (int firstLedIndex, int lastLedIndex) = KowloonConfig.ApartmentRanges[apartmentIndex];

@@ -13,11 +13,11 @@
     {
         x += offset;
         <div class="rowStart" style="width: @(x.ToString("0.##"))em"></div>
-        
+
         for (int i = 0; i < width; i++)
         {
             int thisApartmentIndex = apartmentIndex;
-            <div class="apartment" @onclick="e => Program.Kowloon.Apartments.CycleApartment(thisApartmentIndex)"></div>
+            <div class="apartment" style="background-color: @(Program.Kowloon.Apartments.GetCssColor(thisApartmentIndex))" @onclick="e => Program.Kowloon.Apartments.CycleApartment(thisApartmentIndex)"></div>
             apartmentIndex++;
         }
     }
