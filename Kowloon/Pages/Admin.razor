@@ -1,6 +1,8 @@
 ﻿@page "/admin"
 @using Kowloon.Core;
 
+<h1>Test Patterns</h1>
+
 @foreach (IRenderer renderer in Program.Kowloon.TestRenderers)
 {
     <button class="@PatternButtonClass(renderer)" @onclick="e => Program.Kowloon.SetTestRenderer(renderer)">@renderer.GetType().Name</button>
@@ -14,7 +16,26 @@
 }
 <button class="@PatternButtonClass(null)" @onclick="e => Program.Kowloon.DisableTestRenderer()" style="font-weight: bold">Resume normal operation</button><br>
 
+<h1>Settings</h1>
+
 Brightness: <input type="number" value="@Program.Kowloon.Brightness" @onchange="e => UpdateBrightness(e.Value?.ToString())" /><br>
+
+Palette:
+<select @onchange="e => ChangePalette(e.Value?.ToString())">
+@{
+    int paletteIndex = 0;
+}
+@foreach (Palette palette in KowloonConfig.Palettes)
+{
+    <option value="@(paletteIndex)" selected="@(Program.Kowloon.Apartments.CurrentPalette == palette)">@(palette.Name)</option>
+    paletteIndex++;
+}
+</select><br>
+
+<h1>Misc</h1>
+
+<button @onclick="e => Program.Kowloon.Apartments.ScrambleColors()">Scramble Colors</button><br>
+<button @onclick="e => Program.Kowloon.Apartments.ScrambleLitColors()">Scramble Currently Lit Colors</button><br>
 
 @code
 {
@@ -47,5 +68,18 @@ Brightness: <input type="number" value="@Program.Kowloon.Brightness" @onchange="
         { Program.Kowloon.Brightness = newBrightnessValue; }
         else
         { Console.Error.WriteLine($"Received invalid brightness value, request ignored."); }
+    }
+
+    private static void ChangePalette(string newPaletteIndex)
+    {
+        int newPaletteIndexValue;
+
+        if (!int.TryParse(newPaletteIndex, out newPaletteIndexValue) || newPaletteIndexValue < 0 || newPaletteIndexValue >= KowloonConfig.Palettes.Count)
+        {
+            Console.Error.WriteLine("Received invalid palette index value, request ignored.");
+            return;
+        }
+
+        Program.Kowloon.Apartments.CurrentPalette = KowloonConfig.Palettes[newPaletteIndexValue];
     }
 }

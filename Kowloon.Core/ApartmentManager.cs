@@ -15,15 +15,23 @@ namespace Kowloon.Core
 
         public event Action ApartmentColorsChanged;
 
+        private Palette _CurrentPalette = KowloonConfig.Palettes[0];
         /// <summary>The current palette</summary>
-        /// <remarks>The 0th color must always be black.</remarks>
-        private int[] CurrentPalette =
+        public Palette CurrentPalette
         {
-            0,
-            0x00FFFFFF,
-            0x00F24D00,
-            0x001EC7AB
-        };
+            get => _CurrentPalette;
+            set
+            {
+                if (value == null)
+                { throw new ArgumentNullException(); }
+
+                if (value == _CurrentPalette)
+                { return; }
+
+                _CurrentPalette = value;
+                ScrambleLitColors(); // Scramble all lit apartments to use the new palette, will also dispatch ApartmentColorsChanged.
+            }
+        }
 
         internal ApartmentManager(KowloonController controller)
         {
@@ -34,7 +42,18 @@ namespace Kowloon.Core
         public void ScrambleColors()
         {
             for (int i = 0; i < ApartmentColors.Length; i++)
-            { ApartmentColors[i] = -Random.Next(CurrentPalette.Length); }
+            { ApartmentColors[i] = -Random.Next(CurrentPalette.Count); }
+
+            ApartmentColorsChanged?.Invoke();
+        }
+
+        public void ScrambleLitColors()
+        {
+            for (int i = 0; i < ApartmentColors.Length; i++)
+            {
+                if (ApartmentColors[i] != 0)
+                { ApartmentColors[i] = -(Random.Next(CurrentPalette.Count - 1) + 1); }
+            }
 
             ApartmentColorsChanged?.Invoke();
         }
@@ -54,11 +73,8 @@ namespace Kowloon.Core
             }
 
             // Otherwise advance to the next color in the palette
-            int newColor = oldColor - 1;
-            if (newColor <= -CurrentPalette.Length)
-            { newColor = 0; }
-
-            ApartmentColors[apartmentIndex] = newColor;
+            int newIndex = (-oldColor + 1) % CurrentPalette.Count;
+            ApartmentColors[apartmentIndex] = -newIndex;
 
             ApartmentColorsChanged?.Invoke();
         }
@@ -73,7 +89,7 @@ namespace Kowloon.Core
 
             if (color < 0)
             {
-                color = -color % CurrentPalette.Length;
+                color = -color % CurrentPalette.Count;
                 color = CurrentPalette[color];
             }
 

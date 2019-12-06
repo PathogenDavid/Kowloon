@@ -91,8 +91,28 @@ namespace Kowloon.Core
             (1.5, 1),
         };
 
+        private static readonly Palette[] _Palettes =
+        {
+            new Palette("Cyberpunk")
+            {
+                0x00FFFFFF,
+                0x00F24D00,
+                0x001EC7AB,
+            },
+            new Palette("Vaporwave")
+            {
+                0xFF4500,
+                0xFF16FE,
+                0x4A008D,
+                0x0100CA,
+                0xFFFFFF,
+                0xFFB828,
+            }
+        };
+
         public static readonly ReadOnlyCollection<(int StartIndex, int EndIndex)> ApartmentRanges = Array.AsReadOnly(_ApartmentRanges);
         public static readonly ReadOnlyCollection<(double Offset, int Width)> RowDescriptions = Array.AsReadOnly(_RowDescriptions);
+        public static readonly ReadOnlyCollection<Palette> Palettes = Array.AsReadOnly(_Palettes);
 
         public static readonly double MinimumLeftOffset;
         public static readonly double MaximumRightOffset;
