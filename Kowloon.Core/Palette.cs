@@ -17,6 +17,10 @@ namespace Kowloon.Core
                 if (index < 0 || index >= Count)
                 { throw new IndexOutOfRangeException(); }
 
+                // We always return black for the 0th color
+                // This is required because ApartmentManager assumes that the 0th color is black.
+                // (It isn't actually possible for ApartmentManager to tell the difference between a black apartment and
+                //  an apartment using the 0th palette color due to how apartment colors are stored.)
                 if (index == 0)
                 { return 0; }
 
