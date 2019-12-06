@@ -12,6 +12,7 @@ namespace Kowloon.Core
         private readonly int[] ApartmentColors = new int[KowloonConfig.ApartmentRanges.Count];
 
         private readonly double[] FlickerTimers = new double[KowloonConfig.ApartmentRanges.Count];
+        private readonly int[] RandomizecChaserOffsets = new int[KowloonConfig.ApartmentRanges.Count];
 
         public event Action ApartmentColorsChanged;
 
@@ -40,6 +41,9 @@ namespace Kowloon.Core
         {
             Controller = controller;
             ScrambleColors();
+
+            for (int i = 0; i < RandomizecChaserOffsets.Length; i++)
+            { RandomizecChaserOffsets[i] = Random.Next(); }
         }
 
         public void ScrambleColors()
@@ -145,6 +149,19 @@ namespace Kowloon.Core
 
                     if (isFlickering && AnimationMode == ApartmentAnimationMode.VariedFlicker)
                     { thisColor = ApplyFlicker(thisColor); }
+
+                    if (AnimationMode == ApartmentAnimationMode.Chaser || AnimationMode == ApartmentAnimationMode.RandomizedChaser)
+                    {
+                        int chaserOffset = Controller.FrameNumber / 6 + ledIndex;
+
+                        if (AnimationMode == ApartmentAnimationMode.RandomizedChaser)
+                        { chaserOffset += RandomizecChaserOffsets[apartmentIndex]; }
+
+                        chaserOffset %= 10;
+
+                        if (chaserOffset >= 5)
+                        { thisColor = 0; }
+                    }
 
                     leds[ledIndex] = thisColor;
                 }

@@ -4,6 +4,8 @@
     {
         Disabled,
         FullRoomFlicker,
-        VariedFlicker
+        VariedFlicker,
+        Chaser,
+        RandomizedChaser
     }
 }
