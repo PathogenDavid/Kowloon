@@ -1,5 +1,7 @@
 ﻿@page "/admin"
 @using Kowloon.Core;
+@using System.Diagnostics;
+@using System.Runtime.InteropServices;
 
 <h1>Test Patterns</h1>
 
@@ -46,6 +48,10 @@ Flicker strength: <input type="number" value="@Program.Kowloon.Apartments.Flicke
 
 <button @onclick="e => Program.Kowloon.Apartments.ScrambleColors()">Scramble Colors</button><br>
 <button @onclick="e => Program.Kowloon.Apartments.ScrambleLitColors()">Scramble Currently Lit Colors</button><br>
+
+<hr>
+
+Power off: <input type="text" @bind="PowerOffPassword" /> <button @onclick="PowerOffClick" disabled="@(!PowerOffEnabled)">@(PowerOffMessage)</button><br>
 
 @code
 {
@@ -107,5 +113,30 @@ Flicker strength: <input type="number" value="@Program.Kowloon.Apartments.Flicke
         { Program.Kowloon.Apartments.FlickerStrength = newFlickerStrengthValue; }
         else
         { Console.Error.WriteLine($"Received invalid flicker strength value, request ignored."); }
+    }
+
+    private string PowerOffPassword = "";
+    private bool PowerOffEnabled => PowerOffPassword == "goodbyekowloon";
+    private static bool PowerOffInitiated = false;
+    private string PowerOffMessage = "Power off Kowloon";
+
+    private void PowerOffClick()
+    {
+        if (!PowerOffEnabled)
+        { return; }
+
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            PowerOffMessage = "Only the actual lamp can be powered down.";
+            return;
+        }
+
+        if (!PowerOffInitiated)
+        {
+            PowerOffInitiated = true;
+            Process.Start("poweroff");
+        }
+
+        PowerOffMessage = "Powering down...";
     }
 }
