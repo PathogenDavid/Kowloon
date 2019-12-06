@@ -111,6 +111,8 @@ namespace Kowloon.Core
             Span<int> leds = Controller.Leds;
             leds.Clear();
 
+            bool isChaserMode = AnimationMode == ApartmentAnimationMode.Chaser || AnimationMode == ApartmentAnimationMode.RandomizedChaser;
+
             for (int apartmentIndex = 0; apartmentIndex < ApartmentColors.Length; apartmentIndex++)
             {
                 int color = GetColor(apartmentIndex);
@@ -150,7 +152,7 @@ namespace Kowloon.Core
                     if (isFlickering && AnimationMode == ApartmentAnimationMode.VariedFlicker)
                     { thisColor = ApplyFlicker(thisColor); }
 
-                    if (AnimationMode == ApartmentAnimationMode.Chaser || AnimationMode == ApartmentAnimationMode.RandomizedChaser)
+                    if (isChaserMode || (isFlickering && AnimationMode == ApartmentAnimationMode.RandomizedChaserFlicker))
                     {
                         int chaserOffset = Controller.FrameNumber / 6 + ledIndex;
 

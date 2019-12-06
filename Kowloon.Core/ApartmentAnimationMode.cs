@@ -6,6 +6,7 @@
         FullRoomFlicker,
         VariedFlicker,
         Chaser,
-        RandomizedChaser
+        RandomizedChaser,
+        RandomizedChaserFlicker,
     }
 }
