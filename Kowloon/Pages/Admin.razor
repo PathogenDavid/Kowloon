@@ -32,6 +32,16 @@ Palette:
 }
 </select><br>
 
+Animation mode:
+<select @onchange="e => ChangeAnimationMode(e.Value?.ToString())">
+@foreach (ApartmentAnimationMode animationMode in Enum.GetValues(typeof(ApartmentAnimationMode)))
+{
+    <option selected="@(Program.Kowloon.Apartments.AnimationMode == animationMode)">@(animationMode)</option>
+}
+</select><br>
+
+Flicker strength: <input type="number" value="@Program.Kowloon.Apartments.FlickerStrength" @onchange="e => ChangeFlickerStrength(e.Value?.ToString())" /><br>
+
 <h1>Misc</h1>
 
 <button @onclick="e => Program.Kowloon.Apartments.ScrambleColors()">Scramble Colors</button><br>
@@ -81,5 +91,21 @@ Palette:
         }
 
         Program.Kowloon.Apartments.CurrentPalette = KowloonConfig.Palettes[newPaletteIndexValue];
+    }
+
+    private static void ChangeAnimationMode(string newAnimationMode)
+    {
+        if (Enum.TryParse<ApartmentAnimationMode>(newAnimationMode, out ApartmentAnimationMode newAnimationModeValue))
+        { Program.Kowloon.Apartments.AnimationMode = newAnimationModeValue; }
+        else
+        { Console.Error.WriteLine("Received invalid animation mode value, request ignored."); }
+    }
+
+    private static void ChangeFlickerStrength(string newFlickerStrength)
+    {
+        if (byte.TryParse(newFlickerStrength, out byte newFlickerStrengthValue))
+        { Program.Kowloon.Apartments.FlickerStrength = newFlickerStrengthValue; }
+        else
+        { Console.Error.WriteLine($"Received invalid flicker strength value, request ignored."); }
     }
 }

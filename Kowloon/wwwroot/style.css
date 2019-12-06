@@ -28,11 +28,14 @@ body {
     margin-bottom: 0.7em;
 }
 
-button, input {
-    background: lightgray;
+button, input, select {
     padding: 0.5em;
     border: 1px solid black;
     margin-bottom: 0.5em;
+}
+
+button {
+    background: lightgray;
 }
 
 button.selected, input.selected {

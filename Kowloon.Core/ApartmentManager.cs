@@ -15,6 +15,9 @@ namespace Kowloon.Core
 
         public event Action ApartmentColorsChanged;
 
+        public ApartmentAnimationMode AnimationMode { get; set; } = ApartmentAnimationMode.FullRoomFlicker;
+        public byte FlickerStrength { get; set; } = 48;
+
         private Palette _CurrentPalette = KowloonConfig.Palettes[0];
         /// <summary>The current palette</summary>
         public Palette CurrentPalette
@@ -118,31 +121,46 @@ namespace Kowloon.Core
                 if (!KowloonConfig.IsValidRange(firstLedIndex, lastLedIndex, leds.Length))
                 { continue; }
 
+                // Check if the apartment is flickering
+                bool isFlickering = FlickerTimers[apartmentIndex] > 0.0;
+
                 // If this apartment isn't flickering, it has a random chance to start
-                if (FlickerTimers[apartmentIndex] <= 0.0)
+                if (!isFlickering)
                 {
                     if (Random.NextDouble() > 0.998)
                     { FlickerTimers[apartmentIndex] = 0.1 + Random.NextDouble() * 3.0; }
                 }
-                // If it is flickering, reduce the flicker timer and apply the flicker effect
+                // If it is flickering, reduce the flicker timer
                 else
-                {
-                    FlickerTimers[apartmentIndex] -= Controller.FrameTime;
+                { FlickerTimers[apartmentIndex] -= Controller.FrameTime; }
 
-                    int flickerAmount = Random.Next(0, 48);
-                    int r = color >> 16 & 0xFF;
-                    int g = color >> 8 & 0xFF;
-                    int b = color & 0xFF;
-                    r = Math.Max(r - flickerAmount, 0) & 0xFF;
-                    g = Math.Max(g - flickerAmount, 0) & 0xFF;
-                    b = Math.Max(b - flickerAmount, 0) & 0xFF;
-                    color = r << 16 | g << 8 | b;
-                }
+                // Apply the whole-room flicker effect
+                if (isFlickering && AnimationMode == ApartmentAnimationMode.FullRoomFlicker)
+                { color = ApplyFlicker(color); }
 
                 // Color the apartment
                 for (int ledIndex = firstLedIndex; ledIndex <= lastLedIndex; ledIndex++)
-                { leds[ledIndex] = color; }
+                {
+                    int thisColor = color;
+
+                    if (isFlickering && AnimationMode == ApartmentAnimationMode.VariedFlicker)
+                    { thisColor = ApplyFlicker(thisColor); }
+
+                    leds[ledIndex] = thisColor;
+                }
             }
+        }
+
+        private int ApplyFlicker(int color)
+        {
+            int flickerAmount = Random.Next(0, FlickerStrength);
+            int r = color >> 16 & 0xFF;
+            int g = color >> 8 & 0xFF;
+            int b = color & 0xFF;
+            r = Math.Max(r - flickerAmount, 0) & 0xFF;
+            g = Math.Max(g - flickerAmount, 0) & 0xFF;
+            b = Math.Max(b - flickerAmount, 0) & 0xFF;
+            return r << 16 | g << 8 | b;
         }
     }
 }
