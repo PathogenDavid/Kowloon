@@ -34,10 +34,19 @@ namespace Kowloon.LedControl
             // Try to load a simulated LED string implementation
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Assembly simulatorAssembly = Assembly.Load("Kowloon.LedControl.Simulator");
-                Type simulatorLedStringType = simulatorAssembly.GetType("Kowloon.LedControl.Simulator.WinFormsLedString", true);
-                ConstructorInfo constructor = simulatorLedStringType.GetConstructor(new Type[] { typeof(int) });
-                return (LedString)constructor.Invoke(BindingFlags.DoNotWrapExceptions, null, new object[] { ledCount }, null);
+                Assembly simulatorAssembly = null;
+
+                try
+                { simulatorAssembly = Assembly.Load("Kowloon.LedControl.Simulator"); }
+                catch (FileNotFoundException)
+                { }
+
+                if (simulatorAssembly != null)
+                {
+                    Type simulatorLedStringType = simulatorAssembly.GetType("Kowloon.LedControl.Simulator.WinFormsLedString", true);
+                    ConstructorInfo constructor = simulatorLedStringType.GetConstructor(new Type[] { typeof(int) });
+                    return (LedString)constructor.Invoke(BindingFlags.DoNotWrapExceptions, null, new object[] { ledCount }, null);
+                }
             }
 
             // If we don't support driving LEDs on this platform, just return a dummy LED string

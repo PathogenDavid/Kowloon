@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kowloon.Core\Kowloon.Core.csproj" />
-    <ProjectReference Include="..\Kowloon.LedControl.Simulator\Kowloon.LedControl.Simulator.csproj" />
+    <!--<ProjectReference Include="..\Kowloon.LedControl.Simulator\Kowloon.LedControl.Simulator.csproj" />-->
   </ItemGroup>
 
   <ItemGroup>
