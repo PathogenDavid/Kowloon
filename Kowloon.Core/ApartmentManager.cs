@@ -9,7 +9,7 @@ namespace Kowloon.Core
 
         /// <summary>The color of each apartment</summary>
         /// <remarks>Negative numbers are indices into the pallete. Positive are specific colors. 0 is always black.</remarks>
-        public readonly int[] ApartmentColors = new int[KowloonConfig.ApartmentRanges.Count];
+        private readonly int[] ApartmentColors = new int[KowloonConfig.ApartmentRanges.Count];
 
         private readonly double[] FlickerTimers = new double[KowloonConfig.ApartmentRanges.Count];
 
