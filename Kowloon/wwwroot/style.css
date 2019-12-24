@@ -75,4 +75,5 @@ button.selected, input.selected {
     background: gray;
     width: 1em;
     height: 1em;
+    cursor: pointer;
 }
